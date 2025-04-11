@@ -16,7 +16,9 @@ export default function Landing() {
               Welcome to <span className="text-blue-400">AuraZ</span>
             </h1>
             <p className="text-xl text-gray-300">
-              Transform your audio into intelligent insights
+              Transform your day to day life into intelligent insights
+              <br/>
+              <p className="text-gray-400 font-light">[ No more notes, just insights ]</p>
             </p>
           </div>
           
