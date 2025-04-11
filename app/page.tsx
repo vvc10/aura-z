@@ -23,8 +23,7 @@ const CHANNELS = 1
 const BITS_PER_SAMPLE = 16
 
 export default function AudioTranscriptionApp() {
-  // Authentication state
-  const { user, loading, logout } = useAuth()
+  const { user, loading, error, logout } = useAuth()
 
   // Device connection state
   const [isConnected, setIsConnected] = useState(false)
@@ -83,6 +82,15 @@ export default function AudioTranscriptionApp() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="text-red-500 mb-4">{error}</div>
+        <Landing />
       </div>
     )
   }
