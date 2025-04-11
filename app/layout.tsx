@@ -9,8 +9,8 @@ import { AuthProvider } from "@/contexts/auth-context"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "AuraZ - Audio Transcription System",
-  description: "Real-time audio transcription using BLE and Deepgram",
+  title: "AuraZ - Audio Transcription",
+  description: "Real-time audio transcription and analysis platform",
 }
 
 export default function RootLayout({
@@ -25,16 +25,16 @@ export default function RootLayout({
         <meta httpEquiv="Permissions-Policy" content="bluetooth=self" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <AuthProvider>
             {children}
-          </ThemeProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
