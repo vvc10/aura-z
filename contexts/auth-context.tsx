@@ -7,14 +7,14 @@ import { auth, googleProvider } from "@/lib/firebase"
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signInWithGoogle: () => Promise<void>
+  login: () => Promise<void>
   logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signInWithGoogle: async () => {},
+  login: async () => {},
   logout: async () => {},
 })
 
@@ -23,19 +23,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user)
-      setLoading(false)
-    })
+    // Only run auth state listener on client side
+    if (typeof window !== "undefined") {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        setUser(user)
+        setLoading(false)
+      })
 
-    return () => unsubscribe()
+      return () => unsubscribe()
+    } else {
+      setLoading(false)
+    }
   }, [])
 
-  const signInWithGoogle = async () => {
+  const login = async () => {
     try {
       await signInWithPopup(auth, googleProvider)
     } catch (error) {
-      console.error("Error signing in with Google:", error)
+      console.error("Error signing in:", error)
       throw error
     }
   }
@@ -50,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

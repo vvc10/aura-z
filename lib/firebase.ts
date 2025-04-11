@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app"
+import { initializeApp, getApps } from "firebase/app"
 import { getAuth, GoogleAuthProvider } from "firebase/auth"
 
 const firebaseConfig = {
@@ -10,7 +10,17 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
-export const googleProvider = new GoogleAuthProvider() 
+// Initialize Firebase only on the client side
+let app
+if (typeof window !== "undefined" && !getApps().length) {
+  app = initializeApp(firebaseConfig)
+}
+
+// Initialize Auth only on the client side
+let auth
+if (typeof window !== "undefined") {
+  auth = getAuth(app)
+}
+
+export const googleProvider = new GoogleAuthProvider()
+export { app, auth } 
