@@ -3,10 +3,9 @@
 import { useState } from "react"
 import { auth, db } from "@/lib/utils"
 import { doc, setDoc } from "firebase/firestore"
-import { useRouter } from "next/navigation"
 
 const DEVICE_OPTIONS = [
-  "Seed XIA nRF52840",
+  "Seed XIA nRF52840", 
   "Seed XIA nRF51840 (old version)"
 ]
 
@@ -28,7 +27,6 @@ export default function OnboardingPage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const router = useRouter()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -44,7 +42,6 @@ export default function OnboardingPage() {
       const user = auth.currentUser
       if (!user) throw new Error("User not authenticated")
 
-      // Save user details to Firestore
       await setDoc(doc(db, "users", user.uid), {
         ...userDetails,
         uid: user.uid,
@@ -52,8 +49,8 @@ export default function OnboardingPage() {
         lastUpdated: new Date()
       })
 
-      // Redirect to AudioRecorderPage after successful submission
-      router.push("/auraz") // Make sure this matches your route
+      // Force a full page reload to reset the state
+      window.location.href = "/"
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save user details")
       console.error(err)

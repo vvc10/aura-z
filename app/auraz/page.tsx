@@ -15,13 +15,20 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import axios from "axios"
 import { auth, cn, db } from "@/lib/utils"
 import { doc, getDoc } from "firebase/firestore"
-import { useRouter } from "next/navigation" 
+import { useRouter } from "next/navigation"
+import { signOut } from "firebase/auth"
+import { Router } from "next/router"
 
+interface AudioRecorderPageProps {
+    userName: string;
+    onSignOut: () => void
+}
 
 const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || ""
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-const AudioRecorderPage = () => {
+const AudioRecorderPage = ({ userName, onSignOut }: AudioRecorderPageProps) => {
+
     const [isConnected, setIsConnected] = useState(false)
     const [connectionStatus, setConnectionStatus] = useState("Not Connected")
     const [isPlaying, setIsPlaying] = useState(false)
@@ -35,27 +42,24 @@ const AudioRecorderPage = () => {
     const [activeTab, setActiveTab] = useState("recordings")
 
     const bluetoothManagerRef = useRef<BluetoothManager | null>(null)
-    const router = useRouter()
 
     useEffect(() => {
-      const checkOnboarding = async () => {
-        const user = auth.currentUser
-        if (!user) {
-          router.push("/") // Redirect to home if not authenticated
-          return
+        const verifyOnboarding = async () => {
+            const user = auth.currentUser
+            if (!user) return
+
+            const userRef = doc(db, "users", user.uid)
+            const docSnap = await getDoc(userRef)
+
+            if (!docSnap.exists() || !docSnap.data().onboardingCompleted) {
+                window.location.href = "/"
+            }
         }
-        
-        const userRef = doc(db, "users", user.uid)
-        const docSnap = await getDoc(userRef)
-        
-        if (!docSnap.exists() || !docSnap.data().onboardingCompleted) {
-          router.push("/") // Redirect to onboarding if not completed
-        }
-      }
-      
-      checkOnboarding()
-    }, [router])
-  
+
+        verifyOnboarding()
+    }, [])
+
+
     useEffect(() => {
         bluetoothManagerRef.current = new BluetoothManager({
             onConnectionStatusChange: (connected, status) => {
@@ -464,10 +468,28 @@ Handle queries efficiently without unnecessary detail, and guide users smoothly 
     return (
         <div className="container mx-auto px-4 py-6 max-w-5xl space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                    auraz.
-                </h1>
-                <ThemeToggle />
+                <div className="justify-between flex flex-row w-full items-center">
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                        auraz.
+                    </h1>
+                    <div className="flex items-center space-x-4 ml-4">
+                        {userName && (
+                            <p className="text-sm font-semibold text-muted-foreground">Hello, {userName}</p>
+                        )}
+                        <ThemeToggle />
+
+                        <Button
+                            onClick={onSignOut}
+                            variant="ghost"
+                            size="sm"
+                            className="text-muted-foreground hover:text-primary"
+                        >
+                            Sign Out
+                        </Button>
+                    </div>
+
+                </div>
+
             </div>
 
             {error && (
