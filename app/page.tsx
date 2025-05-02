@@ -101,7 +101,7 @@ export default function Home() {
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-fit flex items-center justify-center gap-2 bg-balck border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-400"
+            className="w-fit flex items-center mx-auto text-white justify-center gap-2 bg-balck border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-400"
           >
             <img
               src="https://www.google.com/favicon.ico"
