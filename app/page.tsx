@@ -89,22 +89,46 @@ export default function Home() {
 
   if (showOnboarding) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gray-950 to-gray-800 text-white">
-        <h1 className="text-5xl font-bold mb-6">Welcome to auraz.</h1>
-        <p className="text-lg mb-8 text-center max-w-md">
-          Your on the go assistant! feel you aura!
-        </p>          <button
-          onClick={handleGoogleSignIn}
-          className="w-fit flex items-center justify-center gap-2 bg-balck border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-400"
-        >
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google logo"
-            className="h-5 w-5"
-          />
-          Continue with Google
-        </button>
+
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center p-4">
+        <div className="max-w-4xl w-full mx-auto text-center">
+          <h1 className="text-6xl font-bold text-white mb-6">Welcome to AuraZ!</h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Your intelligent audio transcription and analysis platform
+          </p>
+
+
+
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-fit flex items-center justify-center gap-2 bg-balck border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-400"
+          >
+            <img
+              src="https://www.google.com/favicon.ico"
+              alt="Google logo"
+              className="h-5 w-5"
+            />
+            Continue with Google
+          </button>
+
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-white mb-3">Real-time Transcription</h3>
+              <p className="text-gray-400">Get instant transcriptions of your audio recordings</p>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-white mb-3">Smart Analysis</h3>
+              <p className="text-gray-400">Advanced AI-powered insights from your conversations</p>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-white mb-3">Secure & Private</h3>
+              <p className="text-gray-400">Your data is encrypted and protected</p>
+            </div>
+          </div>
+        </div>
       </div>
+
 
     )
   }
